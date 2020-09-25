@@ -2,6 +2,30 @@ import numpy as np
 import math as m
 
 
+def find_possible_Pi (T):
+  '''
+  Parameters
+  ----------
+  T : list
+    T[s][a][s'] is equal to the transition probability T(s,a,s') to go from s to s' with action a
+
+  Returns
+  -------
+  possible_Pi : list
+    possible_Pi[s] is a list of possible actions from state s
+  '''
+  # init
+  n_state = len(T)
+  possible_Pi = [[]]*n_state
+  # find passiple actions a from states s
+  for s in range (n_state):
+    for a in range (len(T[s])):
+      # an action a is not available from state s if and only if all the probability transitions to states s' are equal to 0. otherwise it is equal to 1
+      is_action = sum(T[s][a]) > 0
+      if is_action:
+        possible_Pi[s].append(a)
+  return possible_Pi
+
 def update_V(cur_V,gamma,T,R,possible_Pi):
     n = len(cur_V)
     new_V=np.zeros((1,n))
