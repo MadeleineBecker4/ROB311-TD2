@@ -28,8 +28,8 @@ def find_possible_Pi (T):
 
 def update_V(cur_V,gamma,T,R,possible_Pi):
     n = len(cur_V)
-    new_V=np.zeros((1,n))
-    for s in range(1,4):
+    new_V=np.zeros((n))
+    for s in range(n):
         new_V[s]=R[s]
         sum=np.zeros(len(possible_Pi[s]))
         for a in possible_Pi[s]:
@@ -46,18 +46,18 @@ def RMS_error(cur_V, new_V):
         return 0
     rms=0
     for s in range(n):
-        rms += (cur_V - new_V)**2
-    rms = m.sqrt(rms)/n
+        rms += (cur_V[s] - new_V[s])**2
+    rms = m.sqrt(rms/n)
     return rms
 
 def optimal_policy(cur_V, T,possible_pi):
     n=len(cur_V)
-    pi=np.zeros((1,n))
+    pi=np.zeros(n)
     for s in range(n):
         if len(possible_pi[s])==1:
             pi[s]=possible_pi[s]
         else:
-            sum = np.zeros((1,len(possible_pi[s])))
+            sum = np.zeros(len(possible_pi[s]))
             for a in possible_pi[s]:
                 for s2 in range(n):
                     sum[a] += T[s][a][s2]*cur_V[s2]
