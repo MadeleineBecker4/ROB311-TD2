@@ -19,7 +19,7 @@ def find_possible_Pi(T):
     """
     # init
     n_state = len(T)
-    possible_Pi = [[]]*n_state
+    possible_Pi = [[] for k in range(n_state)]
     # find passiple actions a from states s
     for s in range(n_state):
         for a in range(len(T[s])):
@@ -59,9 +59,9 @@ def update_V(cur_V, gamma, T, R, possible_Pi):
     for s in range(n):
         new_V[s] = R[s]
         sum = np.zeros(len(possible_Pi[s]))
-        for a in possible_Pi[s]:
+        for i in range(len(possible_Pi[s])):
             for s2 in range(n):
-                sum[a] += gamma*T[s][a][s2]*cur_V[s2]
+                sum[i] += gamma*T[s][possible_Pi[s][i]][s2]*cur_V[s2]
         new_V[s] += max(sum)
     return new_V
 
@@ -85,7 +85,7 @@ def RMS_error(cur_V, new_V):
     n = len(cur_V)
     if len(new_V) != n:
         print('Error : new V and current V doesn t have the same size.')
-        return 0
+        return -1
     rms = 0
     for s in range(n):
         rms += (cur_V[s] - new_V[s])**2
@@ -93,7 +93,7 @@ def RMS_error(cur_V, new_V):
     return rms
 
 
-def optimal_policy(cur_V, T, possible_pi):
+def optimal_policy(cur_V, T, possible_Pi):
     """
     Compute the optimal policy .
 
@@ -114,12 +114,12 @@ def optimal_policy(cur_V, T, possible_pi):
     n = len(cur_V)
     pi = np.zeros(n)
     for s in range(n):
-        if len(possible_pi[s]) == 1:
-            pi[s] = possible_pi[s]
+        if len(possible_Pi[s]) == 1:
+            pi[s] = possible_Pi[s][0]
         else:
-            sum = np.zeros(len(possible_pi[s]))
-            for a in possible_pi[s]:
+            sum = np.zeros(len(possible_Pi[s]))
+            for i in range(len(possible_Pi[s])):
                 for s2 in range(n):
-                    sum[a] += T[s][a][s2]*cur_V[s2]
-            pi[s] = np.argmax(sum)
+                    sum[i] += T[s][possible_Pi[s][i]][s2]*cur_V[s2]
+            pi[s] = possible_Pi[s][np.argmax(sum)]
     return pi
