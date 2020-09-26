@@ -3,26 +3,29 @@ import math as m
 
 
 def find_possible_Pi(T):
-    '''
-    Find the possible actions for each state
+    """
+    Find the possible actions for each state.
 
     Parameters
     ----------
     T : list
-      T[s][a][s'] is equal to the transition probability T(s,a,s') to go from s to s' with action a
+        T[s][a][s'] is equal to the transition probability T(s,a,s') to go from
+        s to s' with action a
 
     Returns
     -------
     possible_Pi : list
-      possible_Pi[s] is a list of possible actions from state s
-    '''
+        possible_Pi[s] is a list of possible actions from state s
+    """
     # init
     n_state = len(T)
     possible_Pi = [[]]*n_state
     # find passiple actions a from states s
     for s in range(n_state):
         for a in range(len(T[s])):
-            # an action a is not available from state s if and only if all the probability transitions to states s' are equal to 0. otherwise it is equal to 1
+            # an action a is not available from state s if and only if all the
+            # probability transitions to states s' are equal to 0. otherwise it
+            # is equal to 1
             is_action = sum(T[s][a]) > 0
             if is_action:
                 possible_Pi[s].append(a)
@@ -30,8 +33,8 @@ def find_possible_Pi(T):
 
 
 def update_V(cur_V, gamma, T, R, possible_Pi):
-    '''
-    compute the new value for each state
+    """
+    Compute the new value for each state.
 
     Parameters
     ----------
@@ -50,12 +53,12 @@ def update_V(cur_V, gamma, T, R, possible_Pi):
     -------
     new_V : list
         list of the new values for each state
-    '''
+    """
     n = len(cur_V)
-    new_V=np.zeros((n))
+    new_V = np.zeros((n))
     for s in range(n):
-        new_V[s]=R[s]
-        sum=np.zeros(len(possible_Pi[s]))
+        new_V[s] = R[s]
+        sum = np.zeros(len(possible_Pi[s]))
         for a in possible_Pi[s]:
             for s2 in range(n):
                 sum[a] += gamma*T[s][a][s2]*cur_V[s2]
@@ -64,8 +67,8 @@ def update_V(cur_V, gamma, T, R, possible_Pi):
 
 
 def RMS_error(cur_V, new_V):
-    '''
-    compute the root mean square error between the current and the new set of values for each state
+    """
+    Compute the RMS error between the current and the new list V.
 
     Parameters
     ----------
@@ -78,8 +81,7 @@ def RMS_error(cur_V, new_V):
     -------
     rms : float
         root mean square error
-    '''
-
+    """
     n = len(cur_V)
     if len(new_V) != n:
         print('Error : new V and current V doesn t have the same size.')
@@ -92,8 +94,8 @@ def RMS_error(cur_V, new_V):
 
 
 def optimal_policy(cur_V, T, possible_pi):
-    '''
-    compute the optimal policy 
+    """
+    Compute the optimal policy .
 
     Parameters
     ----------
@@ -108,10 +110,9 @@ def optimal_policy(cur_V, T, possible_pi):
     -------
     pi : list
         list of the action for each state for the optimal policy
-    '''
-
-    n=len(cur_V)
-    pi=np.zeros(n)
+    """
+    n = len(cur_V)
+    pi = np.zeros(n)
     for s in range(n):
         if len(possible_pi[s]) == 1:
             pi[s] = possible_pi[s]
