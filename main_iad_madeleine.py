@@ -30,7 +30,8 @@ T[3][2] = [0, 0, 0, 0]
 gamma = 0.9
 eps = 0.01
 # instrumentation parameters
-isInstrumentionON = True
+isInstrumentionON = True  # if True, save variable values during the iteration
+# of the algorithm and plot them
 
 # compute the possible action for each state
 possible_Pi = af.find_possible_Pi(T)
@@ -76,14 +77,14 @@ if isInstrumentionON:
         print("error : 0 iteration in the iteration value algorithm")
     else:
         index = np.arange(1, i+1)
-        plt.plot(index, instrum_diff,"r", label="RMS")
+        plt.plot(index, instrum_diff, "r", label="RMS")
         plt.xlabel('number of iteration')
         plt.ylabel("RMS between consecutive vector V*")
-        plt.plot(index, eps*np.ones(i),"b", label="eps")
+        plt.plot(index, eps*np.ones(i), "b", label="eps")
         plt.legend()
         plt.show()
         for s in range(n_state):
-            plt.plot(index, instrum_pi[s],"+")
+            plt.plot(index, instrum_pi[s], "+")
             plt.xlabel('number of iteration')
             plt.ylabel("Optimal pi(" + str(s) + ")")
             plt.show()
